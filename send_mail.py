@@ -7,22 +7,20 @@ from jinja2 import Template
 import json
 
 class WorkLog:
-    def __init__(self,name='Your Name',email="yourmail@eydean.com"):
+    def __init__(self,name='Rajat Shrestha',email="rajat.shrestha@eydean.com"):
         self.name=name
         self.email=email
-        self.mailto='samplemail@eydean.com'
-        self.cc=None
+        self.mailto='aabhash.dhakal@eydean.com'
+        self.cc='pankaj.niroula@eydean.com'
         self.date=datetime.date.today()
         self.worklog={
         'task_of_today':[],
         'task_completed':[],
         'problems_faced':[],
-        'solved_problems':[],
-        'unsolved_problems':[],
         'planning_for_tomorrow':[]}
         self.html_body=None
         self.rendered_html=None
-    
+
     def load_html(self):
         with open("mail_template.html") as reader:
             self.html_body=reader.read()
@@ -31,17 +29,15 @@ class WorkLog:
             task_today=self.worklog['task_of_today'], \
                 task_completed=self.worklog['task_completed'], \
                     issues=self.worklog['problems_faced'], \
-                        solved_problems=self.worklog['solved_problems'], \
-                            unsolved_problems=self.worklog['unsolved_problems'], \
-                                plans_tomorrow=self.worklog['planning_for_tomorrow'])
-    
+                        plans_tomorrow=self.worklog['planning_for_tomorrow'])
+
     def save_worklog(self):
         with open("worklog.json","r") as json_file:
             log=json.load(json_file)
         log.append({str(self.date):self.worklog})
         with open("worklog.json","w") as json_file:
             json.dump(log,json_file)
-    
+
     def input_logs(self):
         for key in self.worklog:
             print("Enter: "+key+":<enter twice to end>:")
@@ -53,11 +49,11 @@ class WorkLog:
 
     def send_mail(self):
         print("Creating email.... Please wait...")
-        MY_KEY=os.getenv('MY_ZOHO_KEY')
+        MY_KEY= '#########' #os.getenv('MY_ZOHO_KEY')
         msg = MIMEMultipart()
         msg['From'] = self.email
         msg['To'] = self.mailto
-        msg['Subject'] = "Work Log: "+self.name
+        msg['Subject'] = "Re: Work Log: "+self.name
         msg.attach(MIMEText(self.rendered_html, 'html'))
         server = smtplib.SMTP('smtp.zoho.com:587')
         server.starttls()
